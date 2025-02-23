@@ -29,7 +29,6 @@
                             <th>Name :</th>
                             <th>Email : </th>
                             <th>Rol :</th>
-                            <th>Actions :</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -41,11 +40,6 @@
                                     <span class="badge bg-{{ $user->role == 'admin' ? 'danger' : 'primary' }}">
                                         {{ ucfirst($user->role) }}
                                     </span>
-                                </td>
-                                <td>
-                                    <a href="{{ route('user.edit', $user->id) }}" class="btn btn-sm btn-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar usuario">
-                                        <i class="fas fa-pencil-alt"></i> Edit
-                                    </a>
                                 </td>
                             </tr>
                         @endforeach

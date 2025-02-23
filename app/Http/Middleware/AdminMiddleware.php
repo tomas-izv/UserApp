@@ -24,12 +24,11 @@ class AdminMiddleware
         if ($user === null) {
             return redirect()->route('login');
         }
-        
-        if (!$user->isSuper() || !$user->isAdmin()) {
-            return redirect()->route('home');
+
+        if ($user->isSuper() || $user->isAdmin()) {
+            return $next($request);
         }
-        
-        
-        return $next($request);
+
+        return redirect()->route('home');
     }
 }
