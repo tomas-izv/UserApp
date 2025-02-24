@@ -25,29 +25,6 @@ class UserController extends Controller
         return view('user.index', ['users' => $users]);
     }
 
-    // public function update(Request $request, User $user)
-
-    // // Handles SuperAdmin being able to edit, update and delete other users.
-    // {
-    //     if (Auth::user()->isAdmin() && $user->isSuper()) {
-    //         return redirect()->route('user.index');
-    //     }
-
-    //     $request->validate([
-    //         'name' => 'required|string|max:255',
-    //         'email' => 'required|email|unique:users,email,' . $user->id,
-    //         'role' => 'required|in:user,admin',
-    //     ]);
-
-    //     $user->name = $request->name;
-    //     $user->email = $request->email;
-    //     $user->role = $request->role;
-
-    //     $user->save();
-
-
-    //     return redirect()->route('user.index')->with('success', 'User updated successfully.');
-    // }
 
     public function update(Request $request, $id)
     {
@@ -66,19 +43,27 @@ class UserController extends Controller
         return redirect()->route('admin')->with('success', 'User updated successfully.');
     }
 
-    public function destroy(User $user)
-    {
-        try {
-            if (Auth::user()->isAdmin() && $user->isSuper()) {
-                return redirect()->route('admin');
-            }
-            $user->delete();
-            return redirect()->route('admin')->with('success', 'User deleted successfully.');
-        } catch (\Exception $error) {
+    public function destroy($id)
+{
+    $authUser = Auth::user(); // Logged-in user
+    $user = User::findOrFail($id); // User being deleted
 
-        }
-
+    // Prevent deleting the super admin
+    if ($user->id === 1) {
+        return redirect()->route('admin')->with('error', 'Super Admin cannot be deleted.');
     }
+
+    // If the logged-in user is an admin (not superadmin), prevent them from deleting other admins
+    if ($authUser->isAdmin() && !$authUser->isSuper() && $user->isAdmin()) {
+        return redirect()->route('admin')->with('error', 'Admins cannot delete other admins.');
+    }
+
+    // If everything is correct, delete the user
+    $user->delete();
+
+    return redirect()->route('admin')->with('success', 'User deleted successfully.');
+}
+
 
     public function show($id)
     {

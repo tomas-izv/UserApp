@@ -57,13 +57,9 @@
                                         <td>
                                             <a href="{{ route('user.show', $user->id) }}"
                                                 class="btn btn-sm btn-primary">Edit</a>
-                                            <!-- <a href="{{ route('user.destroy', $user->id) }}"
-                                                                                                                class="btn btn-sm btn-danger deleteAction" data-id="{{ $user->id }}">Delete</a> -->
-                                            @if ($user->id !== 1 && !(Auth::user()->role == 'admin' && $user->role == 'admin'))
+                                            @if (Auth::user()->isSuper() || (Auth::user()->isAdmin() && !$user->isAdmin()) || Auth::user()->id === $user->id)
                                                 <a href="{{ route('user.destroy', $user->id) }}"
-                                                    class="btn btn-sm btn-danger deleteAction" data-id="{{ $user->id }}">
-                                                    Delete
-                                                </a>
+                                                    class="btn btn-sm btn-danger deleteAction" data-id="{{ $user->id }}">Delete</a>
                                             @endif
                                             @if (is_null($user->email_verified_at) && Auth::user()->role != 'user')
                                                 <form action="{{ route('user.verifyManually', $user->id) }}" method="POST"
