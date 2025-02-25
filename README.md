@@ -26,4 +26,4 @@
 <img src="./images/delete.png" alt="Delete">
 
 ## Settings page
-<img src="./images/setting.png" alt="Settings">
+<img src="./images/settings.png" alt="Settings">
